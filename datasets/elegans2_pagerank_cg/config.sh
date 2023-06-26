@@ -1,17 +1,17 @@
 # Dataset configuration
 # ---------------------
 
-DATASET=--DATASET--
+DATASET=elegans2_pagerank_cg
 NETWORK="datasets/${DATASET}/network.dot"
-SKIP_MEASURES=false
-LAYOUT=BatchTree
 
 # Algorithm configuration
 # -----------------------
 
+# Layout algorithm to use. Options are BatchTree, CG, and DELG.
+LAYOUT="CG"
+
 # Number of nodes in each layer (in fractions)
-#LAYERS="0.005,0.05,0.10,0.20,0.50,0.75,1.0"
-LAYERS="0.025,0.1,0.2,0.4,0.6,0.8,1.0"
+LAYERS="0.005,0.05,0.10,0.20,0.30,0.50,0.85"
 
 # Number of times the layout algorithm is run
 # Optional (but it is highly recommended that this is set)

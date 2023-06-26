@@ -1,14 +1,14 @@
 # Dataset configuration
 # ---------------------
 
-DATASET=sample
-NETWORK="datasets/sample/network.dot"
+DATASET=elegans2_pagerank_delg
+NETWORK="datasets/${DATASET}/network.dot"
 
 # Algorithm configuration
 # -----------------------
 
 # Layout algorithm to use. Options are BatchTree, CG, and DELG.
-LAYOUT="BatchTree"
+LAYOUT="DELG"
 
 # Number of nodes in each layer (in fractions)
 LAYERS="0.005,0.05,0.10,0.20,0.30,0.50,0.85"

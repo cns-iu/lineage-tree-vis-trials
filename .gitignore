@@ -1,3 +1,9 @@
+.vscode/
+.venv/
+raw-data/
+site/
+
+
 # Singularity SIF files
 ghcr.io_cns-iu_map4sci:main.sif
 

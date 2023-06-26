@@ -3,7 +3,7 @@ shopt -s expand_aliases
 export CURRENT_VERSION=v1
 
 # Options are docker or cwl
-export RUNNER=docker
+export RUNNER=singularity
 
 # If using singularity, add --singularity to this environment variable
 export CWL_OPTS=""
