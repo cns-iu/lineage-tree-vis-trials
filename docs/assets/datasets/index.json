@@ -1,0 +1,8 @@
+[
+  {"id": "elegans2_betweeness_batchtree", "name": "elegans2_betweeness_batchtree", "dir": "assets/datasets/elegans2_betweeness_batchtree"}
+, {"id": "elegans2_betweeness_cg", "name": "elegans2_betweeness_cg", "dir": "assets/datasets/elegans2_betweeness_cg"}
+, {"id": "elegans2_betweeness_delg", "name": "elegans2_betweeness_delg", "dir": "assets/datasets/elegans2_betweeness_delg"}
+, {"id": "elegans2_pagerank_batchtree", "name": "elegans2_pagerank_batchtree", "dir": "assets/datasets/elegans2_pagerank_batchtree"}
+, {"id": "elegans2_pagerank_cg", "name": "elegans2_pagerank_cg", "dir": "assets/datasets/elegans2_pagerank_cg"}
+, {"id": "elegans2_pagerank_delg", "name": "elegans2_pagerank_delg", "dir": "assets/datasets/elegans2_pagerank_delg"}
+]
