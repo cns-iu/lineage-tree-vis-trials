@@ -25,13 +25,22 @@ def main(args):
     OUTPUT = args.output
     MAPPING = args.mapping
     WEIGHTS = args.node_weights
+    SCALED_MAX_WEIGHT = 1000
 
     labels = {}
     if MAPPING:
         for row in DictReader(open(MAPPING)):
-            labels[row['cell']] = row['type']
+            label = row['type']
+            if label not in [ 'NA', 'other' ]:
+                labels[row['cell']] = label
 
-    phylo_tree = Phylo.read(INPUT, "newick")
+    # Find the rooted tree
+    phylo_tree = None
+    for t in Phylo.parse(INPUT, "newick"):
+        if t.root:
+            phylo_tree = t
+
+    root = phylo_tree.root.name
     tree = Phylo.to_networkx(phylo_tree)
 
     G = nx.Graph()
@@ -41,22 +50,36 @@ def main(args):
 
     max_weight = max(weight for (_, _, weight) in tree.edges.data('weight'))
     for (source, target, weight) in tree.edges.data('weight'):
-        G.add_edge(source.name, target.name, weight=weight / max_weight * 1000)
+        weight = weight / max_weight * SCALED_MAX_WEIGHT
+
+        # Emphasize edges with a root node or custom-labeled nodes
+        if source.name in labels or target.name in labels or source.name == root or target.name == root:
+            weight += SCALED_MAX_WEIGHT
+
+        G.add_edge(source.name, target.name, weight=weight)
 
     if WEIGHTS == 'pagerank':
         pagerank_items = nx.pagerank(G, weight='weight').items()
         max_rank = max(rank for (_n, rank) in pagerank_items)
         for (n, rank) in pagerank_items:
-            G.nodes[n]['weight'] = rank / max_rank * 1000
+            G.nodes[n]['weight'] = rank / max_rank * SCALED_MAX_WEIGHT
     elif WEIGHTS == 'betweenness':
-        for (n, centrality) in nx.betweenness_centrality(G, weight='weight', normalized=False).items():
-            G.nodes[n]['weight'] = centrality
+        beweenness_items = nx.betweenness_centrality(G, weight='weight', normalized=False).items()
+        max_rank = max(rank for (_n, rank) in beweenness_items)
+        for (n, centrality) in beweenness_items:
+            G.nodes[n]['weight'] = centrality / max_rank * SCALED_MAX_WEIGHT
+
+    # Emphasize root node and custom-labeled nodes
+    for n in G.nodes():
+        if n == root or n in labels:
+            G.nodes[n]['weight'] += SCALED_MAX_WEIGHT
 
     G = G.subgraph(max(nx.connected_components(G), key=len)).copy()
     H = convert_node_labels_to_integers(G, 1, 'decreasing degree', 'cell')
 
     write_dot(H, OUTPUT)
 
+    print(H.number_of_nodes(), H.number_of_edges())
 
 if __name__ == "__main__":
     parser = _get_arg_parser()

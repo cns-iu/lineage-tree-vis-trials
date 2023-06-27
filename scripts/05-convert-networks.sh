@@ -2,12 +2,11 @@
 source constants.sh
 set -ev
 
-MAPPING=./input-data/C_elegans_cell_types.csv
-
 for measure in betweenness pagerank; do
-  for network in $(ls ./input-data/*.txt)
+  for dsName in $(ls ./input-data)
   do
-    dataset=$(basename "${network%.txt}")_$measure
+    network=./input-data/$dsName
+    dataset=${dsName}_$measure
     echo $network $dataset
     echo
     OUT=./datasets/${dataset}_BatchTree
@@ -17,8 +16,10 @@ for measure in betweenness pagerank; do
 
     if [ ! -e $OUT/network.dot ]
     then
+      MAPPING=$network/${dsName}_labels.csv
+      NW_FILE=$network/${dsName}_tree.nw
       python3 src/newick2dot.py --mapping $MAPPING --node-weights $measure \
-        ${network} $OUT/network.dot &> $OUT/convert.log.txt
+        $NW_FILE $OUT/network.dot &> $OUT/convert.log.txt
       cp $OUT/network.dot $OUT2/network.dot
       cp $OUT/network.dot $OUT3/network.dot
     fi
